@@ -156,7 +156,7 @@ public class client_frame extends javax.swing.JFrame
 
         lb_address.setText("Address : ");
 
-        tf_address.setText("localhost");
+        tf_address.setText("192.168.120.40");
         tf_address.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tf_addressActionPerformed(evt);
@@ -165,7 +165,7 @@ public class client_frame extends javax.swing.JFrame
 
         lb_port.setText("Port :");
 
-        tf_port.setText("2222");
+        tf_port.setText("9999");
         tf_port.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tf_portActionPerformed(evt);
@@ -231,7 +231,7 @@ public class client_frame extends javax.swing.JFrame
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(lb_username, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
+                            .addComponent(lb_username, javax.swing.GroupLayout.PREFERRED_SIZE, 62, Short.MAX_VALUE)
                             .addComponent(lb_address, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)

@@ -232,7 +232,7 @@ public class server_frame extends javax.swing.JFrame
 
             try 
             {
-                ServerSocket serverSock = new ServerSocket(2222);
+                ServerSocket serverSock = new ServerSocket(9999);
 
                 while (true) 
                 {
