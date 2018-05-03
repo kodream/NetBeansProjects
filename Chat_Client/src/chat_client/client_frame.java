@@ -6,9 +6,9 @@ import java.util.*;
 
 public class client_frame extends javax.swing.JFrame 
 {
-    String username, address = "localhost";
+    String username, address = "192.168.120.40";
     ArrayList<String> users = new ArrayList();
-    int port = 2222;
+    int port = 9999;
     Boolean isConnected = false;
     
     Socket sock;
