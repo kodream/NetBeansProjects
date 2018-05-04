@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import sun.applet.Main;
 
 /**
@@ -24,10 +25,12 @@ public class InfoSiteUI extends javax.swing.JFrame {
     private int index=0;
 
 
+
     /**
      * Creates new form InfoSiteClientUI
      */
     public InfoSiteUI() {
+        
         initComponents();
     }
 
@@ -58,8 +61,18 @@ public class InfoSiteUI extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jFrame3 = new javax.swing.JFrame();
-        jButton1 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jPanel_main = new javax.swing.JPanel();
+        jPanel_login = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel_registe = new javax.swing.JPanel();
+        jButton4 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         jFrame1.setMinimumSize(new java.awt.Dimension(400, 500));
         jFrame1.setSize(new java.awt.Dimension(400, 5));
@@ -159,62 +172,155 @@ public class InfoSiteUI extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setText("jButton1");
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/javaproject/ix.jpg"))); // NOI18N
+
+        jButton2.setText("Next");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Previous");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(291, 291, 291)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(97, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(287, 287, 287))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addGap(109, 109, 109)
+                        .addComponent(jButton2)
+                        .addGap(216, 216, 216))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton2))
+                .addGap(49, 49, 49))
+        );
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 132, 740, -1));
+
+        jPanel_main.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel_login.setBackground(new java.awt.Color(0, 102, 102));
+
+        jButton1.setText("회원가입");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("D:\\0java\\NetBeansProjects\\JavaApplication11\\src\\javaproject\\ix.jpg")); // NOI18N
-        jLabel1.setText("jLabel1");
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
+        jLabel3.setText("로그인창입니다.");
+
+        javax.swing.GroupLayout jPanel_loginLayout = new javax.swing.GroupLayout(jPanel_login);
+        jPanel_login.setLayout(jPanel_loginLayout);
+        jPanel_loginLayout.setHorizontalGroup(
+            jPanel_loginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel_loginLayout.createSequentialGroup()
+                .addContainerGap(165, Short.MAX_VALUE)
+                .addGroup(jPanel_loginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_loginLayout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(113, 113, 113))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_loginLayout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(89, 89, 89))))
+        );
+        jPanel_loginLayout.setVerticalGroup(
+            jPanel_loginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_loginLayout.createSequentialGroup()
+                .addGap(68, 68, 68)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(122, 122, 122))
+        );
+
+        jPanel_main.add(jPanel_login, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 430, 390));
+
+        jPanel_registe.setBackground(new java.awt.Color(0, 51, 204));
+
+        jButton4.setText("로그인");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(483, 483, 483)
-                .addComponent(jButton1)
-                .addGap(168, 168, 168)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(226, Short.MAX_VALUE))
+        jLabel4.setText("회원가입창입니다.");
+
+        javax.swing.GroupLayout jPanel_registeLayout = new javax.swing.GroupLayout(jPanel_registe);
+        jPanel_registe.setLayout(jPanel_registeLayout);
+        jPanel_registeLayout.setHorizontalGroup(
+            jPanel_registeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_registeLayout.createSequentialGroup()
+                .addContainerGap(248, Short.MAX_VALUE)
+                .addComponent(jButton4)
+                .addGap(113, 113, 113))
+            .addGroup(jPanel_registeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel_registeLayout.createSequentialGroup()
+                    .addGap(121, 121, 121)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(133, Short.MAX_VALUE)))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(260, 260, 260)
-                .addComponent(jButton1)
-                .addContainerGap(456, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(374, 374, 374))
+        jPanel_registeLayout.setVerticalGroup(
+            jPanel_registeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_registeLayout.createSequentialGroup()
+                .addContainerGap(245, Short.MAX_VALUE)
+                .addComponent(jButton4)
+                .addGap(122, 122, 122))
+            .addGroup(jPanel_registeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel_registeLayout.createSequentialGroup()
+                    .addGap(160, 160, 160)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(161, Short.MAX_VALUE)))
         );
+
+        jPanel_main.add(jPanel_registe, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 430, -1));
+
+        getContentPane().add(jPanel_main, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 100, 430, 390));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_NextActionPerformed
         // TODO add your handling code here:
-        String[] imageList = getImages();
-        ++index;
-        showImage(index);
+//        String[] imageList = getImages();
+//        ++index;
+//        showImage(index);
         
     }//GEN-LAST:event_btn_NextActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        jFrame2.pack();
-        jFrame2.setVisible(true);
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jFrame2WindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jFrame2WindowClosed
         // TODO add your handling code here:
@@ -226,24 +332,78 @@ public class InfoSiteUI extends javax.swing.JFrame {
        
     }//GEN-LAST:event_jFrame2WindowClosing
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        // TODO add your handling code here:
-        jFrame2.pack();
-        jFrame2.setVisible(true);
-    }//GEN-LAST:event_jLabel1MouseClicked
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+         //next clicked
+         
+         index = index + 1;
+       if(index == getImages().length)
+       {
+           JOptionPane.showMessageDialog(this, "마지막 이미지입니다.처음 이미지를 보여줍니다.");
+           index=0;
+           
+       }
+       
+        try {
+            showImage(index);
+        } catch (IOException ex) {
+            Logger.getLogger(InfoSiteUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                    
+    }//GEN-LAST:event_jButton2ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        new InfoSiteUI().setVisible(true);
-        System.out.println("hello");
-    }
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // previous clicked
+        if(index<=0){
+            index=0;
+        }else{
+         index = index - 1;
+        }
+       if(index ==0 )
+       {
+           JOptionPane.showMessageDialog(this, "처음 이미지입니다.");
+           index=0;
+       }
+        try {
+            showImage(index);
+        } catch (IOException ex) {
+            Logger.getLogger(InfoSiteUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:///로그버튼
+
+       jPanel_login.setVisible(true);
+       jPanel_registe.setVisible(false);
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here://회원가입버튼
+       jPanel_registe.setVisible(true);
+        jPanel_login.setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+         jPanel_login.setVisible(true);
+        jPanel_registe.setVisible(false);
+    }//GEN-LAST:event_formWindowOpened
+
+//    /**
+//     * @param args the command line arguments
+//     */
+//    public static void main(String[] args) {
+//        new InfoSiteUI().setVisible(true);
+//        System.out.println("hello");
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Next;
     private javax.swing.JButton btn_Previous;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -255,8 +415,15 @@ public class InfoSiteUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JList<String> jList2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel_login;
+    private javax.swing.JPanel jPanel_main;
+    private javax.swing.JPanel jPanel_registe;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
@@ -264,17 +431,22 @@ public class InfoSiteUI extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 public String[] getImages()
     {
-        File file = new File(getClass().getResource("./img/g7/").getFile());
+        File file = new File(getClass().getResource("/img/g7").getFile());
         String[] imagesList = file.list();
+        
         return imagesList;
     }
 
- public void showImage(int index)
+ public void showImage(int index) throws IOException
     {
         String[] imagesList = getImages();
         String imageName = imagesList[index];
-        ImageIcon icon = new ImageIcon(getClass().getResource("./img/g7/"+imageName));
-        Image image = icon.getImage().getScaledInstance(jLabel18.getWidth(), jLabel18.getHeight(), Image.SCALE_SMOOTH);
-        jLabel18.setIcon(new ImageIcon(image));
+        //BufferedImage img = ImageIO.read(new File("/img/g7"+imageName));
+        System.out.println(imagesList[0]);
+        System.out.println("/img/g7/"+imageName);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/img/g7/"+imageName));
+        Image image = icon.getImage().getScaledInstance(jLabel2.getWidth(), jLabel2.getHeight(), Image.SCALE_SMOOTH);
+        jLabel2.setIcon(new ImageIcon(image));
+      
     }
 }

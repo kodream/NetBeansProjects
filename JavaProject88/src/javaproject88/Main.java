@@ -3,20 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package javaproject;
+package javaproject88;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  *
  * @author edu
  */
-public class Client {
+public class Main {
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
         // TODO code application logic here
-        new InfoSiteUI().setVisible(true);
+        new Server();
+        
     }
     
 }
