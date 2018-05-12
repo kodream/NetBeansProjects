@@ -2,6 +2,12 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
+        <group>
+            <file>file:/D:/Program%20Files/NetBeansProjects/Chat_Client/src/chat_client/client_frame.java</file>
+        </group>
+=======
         <group/>
+>>>>>>> 2c37fba4b162aa55f852e150d99e9dda5472bb5a
     </open-files>
 </project-private>
