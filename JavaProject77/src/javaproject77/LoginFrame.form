@@ -250,7 +250,6 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="locationByPlatform" type="boolean" value="true"/>
     <Property name="undecorated" type="boolean" value="true"/>
   </Properties>
   <SyntheticProperties>
@@ -294,7 +293,7 @@
         <Container class="javax.swing.JPanel" name="jPanel_side">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="cc" green="cc" red="cc" type="rgb"/>
+              <Color blue="99" green="99" red="0" type="rgb"/>
             </Property>
           </Properties>
           <Constraints>
@@ -308,8 +307,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel_LoginImage" pref="296" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jLabel_LoginImage" pref="316" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -326,6 +324,9 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel_LoginImage">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/img/login.jpg"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="jLabel1"/>
               </Properties>
             </Component>
@@ -334,7 +335,7 @@
         <Container class="javax.swing.JPanel" name="jPanel_top">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="cc" green="cc" red="cc" type="rgb"/>
+              <Color blue="99" green="99" red="0" type="rgb"/>
             </Property>
           </Properties>
           <Events>
@@ -386,7 +387,7 @@
         <Container class="javax.swing.JPanel" name="jPanel_bottom">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="cc" green="cc" red="cc" type="rgb"/>
+              <Color blue="99" green="99" red="0" type="rgb"/>
             </Property>
           </Properties>
           <Constraints>
@@ -452,7 +453,7 @@
             <Container class="javax.swing.JPanel" name="jPanel_login">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="cc" green="cc" red="cc" type="rgb"/>
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
               </Properties>
 
@@ -574,7 +575,7 @@
             <Container class="javax.swing.JPanel" name="jPanel_join">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="cc" green="cc" red="cc" type="rgb"/>
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
               </Properties>
 

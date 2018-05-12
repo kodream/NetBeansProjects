@@ -11,7 +11,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,41 +29,33 @@ public class MemberDAO {
     }
     
     public  void insertMember(String []data) throws  MyException {
-        try{
-                PreparedStatement stmt = con.prepareStatement("insert into membert (mbname,mbemail,mbpw) values(?,?,?)");
+        
+        try{    
+                System.out.println("회원가입:" + data[0] + data[1]+data[2]+data[3]);
+                PreparedStatement stmt = con.prepareStatement("insert into membert (mname,memail,mpw) values(?,?,?)");
                 stmt.setString(1, data[1]);
                 stmt.setString(2, data[2]);
                 stmt.setString(3, data[3]);
                 int i =  stmt.executeUpdate();
-               // System.out.println(i + "행이 insert되었습니다.");
+                System.out.println(i + "행이 insert되었습니다.");
                 stmt.close();
-//       try{
-//            Statement stmt = con.createStatement();
-//            int i =  stmt.executeUpdate("insert into membert (mbname,mbemail,mbpw) values('" + data[1]+ "','" + data[2]+"','"  + data[3] +"');");
-//            System.out.println(i + "행이 insert되었습니다.");
-//            stmt.close();
+
         }catch(SQLException ex){
-            ex.printStackTrace();
+            System.out.println("server erro:" + ex);
             throw new MyException("회원가입 실패하였습니다.");
         }
     }
 
     public String loginMember(String[] data) throws MyException{
         try {
-               // System.out.println(data[2]);
-                // System.out.println("err-01");
-                PreparedStatement stmt1 = con.prepareStatement("select mbname from membert where mbemail=? and mbpw=?");
-                //int productNo = Integer.parseInt(data[1]);
-               // System.out.println("err-02");
+                PreparedStatement stmt1 = con.prepareStatement("select mname from membert where memail=? and mpw=?");
                 stmt1.setString(1,data[1]);
                 stmt1.setString(2, data[2]);
                 ResultSet rs = stmt1.executeQuery();
-                //System.out.println("err-03");
                 String name=null;
                 if(rs.next()){
-                    name=rs.getString("mbname");
+                    name=rs.getString("mname");
                 }
-            
             return name;
             
         } catch (SQLException ex) {
@@ -74,41 +65,44 @@ public class MemberDAO {
 
     }
 
-    
-    public List<String> viewList(String[] data) throws MyException{
+  
+    public String viewList(String[] data) throws MyException{
         try {
-                //System.out.println(data[1]);
-                // System.out.println("err-01");
                 PreparedStatement stmt1 = con.prepareStatement("select * from phonet where pcom=?");
-                //int productNo = Integer.parseInt(data[1]);
-                //System.out.println("err-02");
                 stmt1.setString(1,data[1]);
-                //stmt1.setString(2, data[2]);
                 ResultSet rs = stmt1.executeQuery();
-                List<String> list = new ArrayList<String>();
-               // System.out.println("err-03");
-                String name=null;
+                //List<String> list = new ArrayList<String>();
+                //String name=null;
+                StringBuilder sb = new StringBuilder();
                 while(rs.next()){
-                    //list.add(rs.getString("pname"));
-                   
+                    sb.append(rs.getString("pname")).append(":");
+                }              
+                sb.setLength(sb.length()-1);
                 
-                   // name=rs.getString("pname");
-                    list.add(rs.getString("pname"));
-                }
-//                for(String str:list){
-//                    System.out.println(str);
-//                }
-            return list;
+            return sb.toString();
             
         } catch (SQLException ex) {
             Logger.getLogger(MemberDAO.class.getName()).log(Level.SEVERE, null, ex);
-            throw new MyException("로그인 오류");
+            throw new MyException("DB 오류");
           }
-
     }
     
-    public void viewPhone(String[] data) throws MyException{
     
+    public void insertChat(String[] ptc) throws SQLException, MyException {
+             try{
+                PreparedStatement stmt = con.prepareStatement("insert into chatt (cname,ccon) values(?,?)");
+                stmt.setString(1,ptc[1]);
+                stmt.setString(2, ptc[2]);
+                int i = stmt.executeUpdate();
+                System.out.println(i + "행이 추가되였습니다");
+                List<String> list = new ArrayList<String>();
+                
+                stmt.close();
+               
+            }catch(SQLException ex){
+                System.out.println("server erro:" + ex);
+                throw new MyException("채팅 추가 실패하였습니다.");
+            }
     }
         
 

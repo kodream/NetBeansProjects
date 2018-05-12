@@ -9,9 +9,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -19,18 +21,16 @@ import javax.swing.JOptionPane;
  */
 public class LoginFrame extends javax.swing.JFrame {
 
-     private final DataInputStream in;
-     private final DataOutputStream out;
-
-    /**
-     * Creates new form LoginFrame
-     */
+     static  DataInputStream in;
+     static  DataOutputStream out;
+     static  Socket s;
+   
     public LoginFrame() throws IOException {
-        Socket s = new Socket("192.168.120.40",9999);
+        s = new Socket("192.168.120.40",9999);
         out = new DataOutputStream(s.getOutputStream());
         in = new DataInputStream(s.getInputStream());
-        
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -217,7 +217,6 @@ public class LoginFrame extends javax.swing.JFrame {
         jDialog_joinno.getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 360, 40));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setLocationByPlatform(true);
         setUndecorated(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
@@ -227,8 +226,9 @@ public class LoginFrame extends javax.swing.JFrame {
 
         jPanel_base.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel_side.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel_side.setBackground(new java.awt.Color(0, 153, 153));
 
+        jLabel_LoginImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/login.jpg"))); // NOI18N
         jLabel_LoginImage.setText("jLabel1");
 
         javax.swing.GroupLayout jPanel_sideLayout = new javax.swing.GroupLayout(jPanel_side);
@@ -237,8 +237,7 @@ public class LoginFrame extends javax.swing.JFrame {
             jPanel_sideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_sideLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel_LoginImage, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jLabel_LoginImage, javax.swing.GroupLayout.PREFERRED_SIZE, 316, Short.MAX_VALUE))
         );
         jPanel_sideLayout.setVerticalGroup(
             jPanel_sideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,7 +249,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
         jPanel_base.add(jPanel_side, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 33, 320, 530));
 
-        jPanel_top.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel_top.setBackground(new java.awt.Color(0, 153, 153));
         jPanel_top.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel_topMouseDragged(evt);
@@ -289,7 +288,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
         jPanel_base.add(jPanel_top, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 40));
 
-        jPanel_bottom.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel_bottom.setBackground(new java.awt.Color(0, 153, 153));
 
         javax.swing.GroupLayout jPanel_bottomLayout = new javax.swing.GroupLayout(jPanel_bottom);
         jPanel_bottom.setLayout(jPanel_bottomLayout);
@@ -306,7 +305,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
         jPanel_main.setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel_login.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel_login.setBackground(new java.awt.Color(255, 255, 255));
         jPanel_login.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel_signinfor.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
@@ -355,7 +354,7 @@ public class LoginFrame extends javax.swing.JFrame {
         });
         jPanel_login.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 330, 90, 40));
 
-        jPanel_join.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel_join.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/user2.png"))); // NOI18N
@@ -505,7 +504,7 @@ public class LoginFrame extends javax.swing.JFrame {
     private void jPanel_topMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel_topMouseDragged
         // TODO add your handling code here:
         int lxx = evt.getXOnScreen();
-       int lyy = evt.getYOnScreen();
+        int lyy = evt.getYOnScreen();
         this.setLocation(lxx-lx, lyy-ly);
     }//GEN-LAST:event_jPanel_topMouseDragged
   
@@ -538,29 +537,41 @@ public class LoginFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel_signupMousePressed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // 회원가입
+         try {
+             // 회원가입
+             if(s==null){
+                 s = new Socket("192.168.120.40",9999);
+                 out = new DataOutputStream(s.getOutputStream());
+                 in = new DataInputStream(s.getInputStream());
+             }
+         } catch (SocketException ex) {
+             Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (IOException ex) {
+             Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
+         }
+        
         String name = jTextField_Name.getText();
         String email = jTextField_email.getText();
-        String pw = jPasswordField_pw.getPassword().toString();
+        char[] pwch = jPasswordField_pw.getPassword();
+        String pw =String.copyValueOf(pwch);
+        System.out.println(pw);
+       
         if(name !=null && !name.equals("")&&email !=null && !email.equals("")&& pw!=null && !pw.equals("")){
             try {
+                 System.out.println("2:"+"회원가입:" + name +":" + email + ":" +pw);
                 out.writeUTF("회원가입:" + name +":" + email + ":" +pw);
+                System.out.println("1:"+"회원가입:" + name +":" + email + ":" +pw);
                 String msg = in.readUTF();
                 if(msg.equals("join_ok")){
-                   // System.out.println("01");
-                    //jDialog_joinok.setVisible(true);
-                    //jDialog_joinok.setVisible(true);
-                        JOptionPane.showMessageDialog(this, msg);
-                   // System.out.println("02");
+                     JOptionPane.showMessageDialog(this, "회원가입되셨습니다.");
                 }else{
                     JOptionPane.showMessageDialog(this, msg);
-                    //jDialog_joinok.setVisible(true);
                 }
                 jTextField_Name.setText("");
                 jTextField_email.setText("");
                 jPasswordField_pw.setText("");
             } catch (IOException ex) {
-                Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
+                 System.out.println("erro"+ex);
             }
            
         }else{
@@ -574,41 +585,47 @@ public class LoginFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel_windowclose1MousePressed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // 로그인
-        String email = jTextField2.getText();
-        String pw = jPasswordField1.getPassword().toString();
-        if(email !=null && !email.equals("")&& pw!=null && !pw.equals("")){
+         try {
+             // 로그인
+             if(s==null){
+             s = new Socket("192.168.120.40",9999);
+             out = new DataOutputStream(s.getOutputStream());
+             in = new DataInputStream(s.getInputStream());
+             }
+         } catch (IOException ex) {
+             Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
+         }
+        
+         String email = jTextField2.getText();
+         char[] pwch = jPasswordField1.getPassword();
+      
+         String pw =String.copyValueOf(pwch);
+         if(email !=null && !email.equals("")&& pw!=null && !pw.equals("")){
             try {
                 out.writeUTF("로그인:" + email + ":" +pw);
                 String msg = in.readUTF();
-                if(msg.equals("login_ok")){
-                    //System.out.println("01");
-                    //jDialog_joinok.setVisible(true);
-                    //jDialog_joinok.setVisible(true);
-                        //JOptionPane.showMessageDialog(this, msg);
-                      //  jFrame1.pack();
-                        new MainJFrame (out,in).setVisible(true);
-                   // System.out.println("02");
+                String[] ptc = msg.split(":");
+                if(ptc[0].equals("login_ok")){
+                      //new MainJFrame (this,s,out,in,ptc[1]).setVisible(true);
+                      new MainJFrame (this,ptc[1]).setVisible(true);
+                      this.setVisible(false);
                 }else{
                     JOptionPane.showMessageDialog(this, msg);
-                    //jDialog_joinok.setVisible(true);
                 }
-               
                 jTextField2.setText("");
                 jPasswordField1.setText("");
             } catch (IOException ex) {
-                Logger.getLogger(LoginFrame.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("erro"+ex);
             }
-           
         }else{
             JOptionPane.showMessageDialog(this, "입력내용을 확인하세요");
         }
     }//GEN-LAST:event_jButton2ActionPerformed
-    int mx,my;    
+      
     /**
      * @param args the command line arguments
      */
-
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

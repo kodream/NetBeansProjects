@@ -5,12 +5,29 @@
  */
 package javaproject77;
 
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,20 +38,61 @@ public class MainJFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainJFrame
      */
-    private final DataInputStream in;
-    private final DataOutputStream out;
-    DefaultListModel<String> dlm;
-    
-    public MainJFrame(DataOutputStream out,DataInputStream in) {
-        this.in = in;
-        this.out = out;
-        dlm = new DefaultListModel<String>();
-        
-        initComponents();
-        jList1.setModel(dlm);
-        firstList();
-    }
+        String name;
+        //private final DataInputStream in;
+        //private final DataOutputStream out;
+        //private Socket s;
+        private final LoginFrame login;
 
+        Color colorSelected;
+        Color colorDefault;
+        char[] buffer;
+        File f ;
+        FileOutputStream fos;
+        BufferedImage img;
+        
+        
+        StringBuilder sb ; //개인대화내용
+        Set<String> moSet;
+    private final Thread t;
+    /*
+    public MainJFrame() throws HeadlessException {
+        this.in = null;
+        this.out = null;
+    }*/
+   // public MainJFrame( LoginFrame login,Socket s,DataOutputStream out,DataInputStream in,String name) throws FileNotFoundException, IOException {
+        public MainJFrame( LoginFrame login,String name) throws FileNotFoundException, IOException {
+
+            this.login = login;
+            this.name =name;
+
+            initComponents();
+            this.setLocationRelativeTo(null);
+            colorSelected = new Color(102,0,51);
+            colorDefault = new Color(0,204,204);
+            buffer = new char[1024];
+           
+            sb = new StringBuilder(); //개인대화내용
+            jLabel_welcom.setText("["+ this.name+ "]님 환영합니다.");
+            moSet= new HashSet<String>();
+
+            setPhoneCollection();    
+            firstList();
+
+           t=new Thread(() -> {
+                        while(true){
+                            try {
+                                 String msg = LoginFrame.in.readUTF();
+                                 String[] c_ptc = msg.split(":");
+                                 clientService(c_ptc);
+
+                            } catch (IOException ex) {
+                                System.out.println("ceero:run()"+ex);
+                            }
+                        }
+                    });
+           t.start();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,18 +102,24 @@ public class MainJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialog1 = new javax.swing.JDialog();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jPanel_main_base = new javax.swing.JPanel();
         jPanel_main_top = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jPanel_main_phone = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
+        jLabel_welcom = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jPanel_main_chat = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jTextField3 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jPanel_main_view = new javax.swing.JPanel();
@@ -70,18 +134,62 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel_lg_ = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        last = new javax.swing.JLabel();
+        first = new javax.swing.JLabel();
+        previous = new javax.swing.JLabel();
+        next = new javax.swing.JLabel();
         jPanel_main_ad = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
 
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jScrollPane3.setViewportView(jTextArea2);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(jTable1);
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDialog1Layout.createSequentialGroup()
+                .addGap(56, 56, 56)
+                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane3)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        setResizable(false);
 
+        jPanel_main_base.setBackground(new java.awt.Color(0, 204, 204));
+
+        jPanel_main_top.setBackground(new java.awt.Color(0, 153, 153));
         jPanel_main_top.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 jPanel_main_topMouseDragged(evt);
@@ -111,37 +219,56 @@ public class MainJFrame extends javax.swing.JFrame {
         );
         jPanel_main_topLayout.setVerticalGroup(
             jPanel_main_topLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jPanel_main_phone.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel15.setFont(new java.awt.Font("MingLiU-ExtB", 0, 36)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(0, 153, 153));
-        jLabel15.setText("It's Phone's World");
+        jLabel15.setFont(new java.awt.Font("Miriam", 1, 48)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(0, 51, 51));
+        jLabel15.setText("Phone's Community");
+
+        jLabel1.setBackground(new java.awt.Color(204, 255, 255));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/exit.png"))); // NOI18N
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel1MousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel_main_phoneLayout = new javax.swing.GroupLayout(jPanel_main_phone);
         jPanel_main_phone.setLayout(jPanel_main_phoneLayout);
         jPanel_main_phoneLayout.setHorizontalGroup(
             jPanel_main_phoneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_main_phoneLayout.createSequentialGroup()
-                .addGap(413, 413, 413)
-                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(446, Short.MAX_VALUE))
+                .addContainerGap(376, Short.MAX_VALUE)
+                .addGroup(jPanel_main_phoneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_main_phoneLayout.createSequentialGroup()
+                        .addComponent(jLabel_welcom, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
+                        .addComponent(jLabel1)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_main_phoneLayout.createSequentialGroup()
+                        .addComponent(jLabel15)
+                        .addGap(421, 421, 421))))
         );
         jPanel_main_phoneLayout.setVerticalGroup(
             jPanel_main_phoneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel_main_phoneLayout.createSequentialGroup()
-                .addGap(39, 39, 39)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_main_phoneLayout.createSequentialGroup()
+                .addContainerGap(46, Short.MAX_VALUE)
                 .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addGap(30, 30, 30)
+                .addGroup(jPanel_main_phoneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel_welcom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
+        jPanel_main_chat.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+
         jLabel10.setText("현재방문자수:");
-
-        jLabel11.setText("jLabel11");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -150,8 +277,8 @@ public class MainJFrame extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 213, Short.MAX_VALUE)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22))
         );
@@ -165,10 +292,16 @@ public class MainJFrame extends javax.swing.JFrame {
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        jButton3.setText("jButton3");
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
 
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
+        jTextArea1.setDragEnabled(true);
         jScrollPane2.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout jPanel_main_chatLayout = new javax.swing.GroupLayout(jPanel_main_chat);
@@ -178,11 +311,8 @@ public class MainJFrame extends javax.swing.JFrame {
             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel_main_chatLayout.createSequentialGroup()
                 .addGroup(jPanel_main_chatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel_main_chatLayout.createSequentialGroup()
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2))
+                    .addComponent(jScrollPane2)
+                    .addComponent(jTextField3))
                 .addContainerGap())
         );
         jPanel_main_chatLayout.setVerticalGroup(
@@ -192,15 +322,13 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel_main_chatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jTextField3)
                 .addContainerGap())
         );
 
         jPanel_main_view.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/LoginPhone.jpg"))); // NOI18N
+        jLabel14.setIcon(new javax.swing.ImageIcon("C:\\Users\\edu\\Desktop\\phone\\g7\\g7_01.jpg")); // NOI18N
         jPanel_main_view.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 470, 360));
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
@@ -208,7 +336,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jPanel_apple.setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel10.setBackground(new java.awt.Color(0, 102, 102));
+        jPanel10.setBackground(new java.awt.Color(102, 0, 51));
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -252,7 +380,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jPanel1_sumsung.setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel12.setBackground(new java.awt.Color(0, 153, 153));
+        jPanel12.setBackground(new java.awt.Color(0, 204, 204));
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
@@ -270,6 +398,11 @@ public class MainJFrame extends javax.swing.JFrame {
         jLabel18.setForeground(new java.awt.Color(0, 153, 153));
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel18.setText("Sumsung");
+        jLabel18.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel18MousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1_sumsungLayout = new javax.swing.GroupLayout(jPanel1_sumsung);
         jPanel1_sumsung.setLayout(jPanel1_sumsungLayout);
@@ -290,7 +423,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jPanel_lg_.setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel11.setBackground(new java.awt.Color(0, 153, 153));
+        jPanel11.setBackground(new java.awt.Color(0, 204, 204));
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -307,6 +440,11 @@ public class MainJFrame extends javax.swing.JFrame {
         jLabel19.setForeground(new java.awt.Color(0, 153, 153));
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel19.setText("  LG자");
+        jLabel19.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel19MousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel_lg_Layout = new javax.swing.GroupLayout(jPanel_lg_);
         jPanel_lg_.setLayout(jPanel_lg_Layout);
@@ -327,22 +465,21 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jPanel_main_view.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 740, 70));
 
-        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/previous.png"))); // NOI18N
-        jPanel_main_view.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 420, 60, 60));
+        jPanel7.setBackground(new java.awt.Color(0, 204, 204));
 
-        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/end.png"))); // NOI18N
-        jPanel_main_view.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 420, 60, 50));
-
-        jPanel7.setBackground(new java.awt.Color(0, 153, 153));
-
-        jPanel8.setBackground(new java.awt.Color(0, 153, 153));
+        jPanel8.setBackground(new java.awt.Color(0, 204, 204));
 
         jList1.setFont(new java.awt.Font("SimSun", 0, 18)); // NOI18N
-        jList1.setForeground(new java.awt.Color(0, 153, 153));
+        jList1.setForeground(new java.awt.Color(0, 51, 51));
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
+        });
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jList1MousePressed(evt);
+            }
         });
         jScrollPane1.setViewportView(jList1);
 
@@ -357,7 +494,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -368,7 +505,7 @@ public class MainJFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66))
+                .addGap(22, 22, 22))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -378,17 +515,49 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel_main_view.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 70, 310, 430));
+        jPanel_main_view.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 70, 270, 430));
 
-        jLabel13.setText("jLabel13");
+        last.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/last.png"))); // NOI18N
+        last.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lastMousePressed(evt);
+            }
+        });
+        jPanel_main_view.add(last, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 450, -1, -1));
+
+        first.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/first.png"))); // NOI18N
+        first.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                firstMousePressed(evt);
+            }
+        });
+        jPanel_main_view.add(first, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 450, -1, 30));
+
+        previous.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/previous (1).png"))); // NOI18N
+        previous.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                previousMousePressed(evt);
+            }
+        });
+        jPanel_main_view.add(previous, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 450, -1, 30));
+
+        next.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/next (1).png"))); // NOI18N
+        next.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                nextMousePressed(evt);
+            }
+        });
+        jPanel_main_view.add(next, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 450, -1, -1));
+
+        jPanel_main_ad.setBackground(new java.awt.Color(0, 204, 204));
+
+        jLabel13.setBackground(new java.awt.Color(0, 204, 204));
 
         javax.swing.GroupLayout jPanel_main_adLayout = new javax.swing.GroupLayout(jPanel_main_ad);
         jPanel_main_ad.setLayout(jPanel_main_adLayout);
         jPanel_main_adLayout.setHorizontalGroup(
             jPanel_main_adLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel_main_adLayout.createSequentialGroup()
-                .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 1217, Short.MAX_VALUE)
         );
         jPanel_main_adLayout.setVerticalGroup(
             jPanel_main_adLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -403,14 +572,14 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel_main_baseLayout.setHorizontalGroup(
             jPanel_main_baseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_main_baseLayout.createSequentialGroup()
-                .addGroup(jPanel_main_baseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel_main_baseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel_main_baseLayout.createSequentialGroup()
                         .addComponent(jPanel_main_chat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel_main_view, javax.swing.GroupLayout.PREFERRED_SIZE, 872, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel_main_ad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel_main_view, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addComponent(jPanel_main_phone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel_main_top, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel_main_top, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel_main_ad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel_main_baseLayout.setVerticalGroup(
@@ -419,11 +588,11 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addComponent(jPanel_main_top, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel_main_phone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel_main_baseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel_main_view, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel_main_chat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(jPanel_main_ad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -435,16 +604,16 @@ public class MainJFrame extends javax.swing.JFrame {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel_main_base, javax.swing.GroupLayout.PREFERRED_SIZE, 1240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel_main_base, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 750, Short.MAX_VALUE)
+            .addGap(0, 807, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel_main_base, javax.swing.GroupLayout.PREFERRED_SIZE, 750, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel_main_base, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
@@ -452,76 +621,332 @@ public class MainJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel9MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MousePressed
-        // Jfrme_main x
-        System.exit(0);
+            try {
+                // Jfrme_main x
+                LoginFrame.out.writeUTF("로그아웃:");
+            } catch (IOException ex) {
+                Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        t.stop();
+        logout();
     }//GEN-LAST:event_jLabel9MousePressed
-int mx,my;
+            int mx,my;
     private void jPanel_main_topMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel_main_topMouseDragged
 
         // Jframe_main
-        int mxx=evt.getXOnScreen();
-        int myy=evt.getYOnScreen();
-        this.setLocation(mxx-mx, myy-my);
+            int mxx=evt.getXOnScreen();
+            int myy=evt.getYOnScreen();
+            this.setLocation(mxx-mx, myy-my);
     }//GEN-LAST:event_jPanel_main_topMouseDragged
 
     private void jPanel_main_topMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel_main_topMousePressed
         // Jframe_main
-        mx = evt.getX();
-        my = evt.getY();
+            mx = evt.getX();
+            my = evt.getY();
 
     }//GEN-LAST:event_jPanel_main_topMousePressed
 
     private void jLabel17MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MousePressed
-        try {
+        
             // TODO add your handling code here:
-            out.writeUTF("제조사:apple");
-            String str = in.readUTF();
-            String [] data = str.split(":");
-           
-            
-            for(String s:data){
-            dlm.addElement(s);
+            jPanel10.setBackground(colorSelected);
+            jPanel12.setBackground(colorDefault);
+            jPanel11.setBackground(colorDefault);
+            try {
+            LoginFrame.out.writeUTF("제조사:apple");
+    
+            } catch (IOException ex) {
+                System.out.println("erro:"+ ex);
             }
+        
+    }//GEN-LAST:event_jLabel17MousePressed
+
+    private void jLabel18MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MousePressed
+        // TODO add your handling code here:
+            jPanel10.setBackground(colorDefault);
+            jPanel12.setBackground(colorSelected);
+            jPanel11.setBackground(colorDefault);
+            try {
+            LoginFrame.out.writeUTF("제조사:sumsung");
+            } catch (IOException ex) {
+                System.out.println("erro:"+ex);
+            }
+    }//GEN-LAST:event_jLabel18MousePressed
+
+    private void jLabel19MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel19MousePressed
+        // TODO add your handling code here:
+        
+            jPanel10.setBackground(colorDefault);
+            jPanel12.setBackground(colorDefault);
+            jPanel11.setBackground(colorSelected);
+            try {
+                LoginFrame.out.writeUTF("제조사:lg");
+           
+            } catch (IOException ex) {
+                System.out.println("erro:"+ex);
+            }
+    }//GEN-LAST:event_jLabel19MousePressed
+
+        private int index=0;
+        private String[] imagesList;
+        private String str; //모델명
+    private void firstMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_firstMousePressed
+        // first image:
+        if(jList1.getSelectedValue()==null){
+            JOptionPane.showMessageDialog(this, "모델명을 선택하세요.");
+        }else{
+            index = 1;
+            try {
+                showImage(index);
+            } catch (IOException ex) {
+                Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } 
+    }//GEN-LAST:event_firstMousePressed
+        
+    private void lastMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lastMousePressed
+        //last
+        if(jList1.getSelectedValue()==null){
+            JOptionPane.showMessageDialog(this, "모델명을 선택하세요.");
+        }else{
+            index = getImages().length - 1;
+            try {
+                showImage(index);
+            } catch (IOException ex) {
+                Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } 
+    }//GEN-LAST:event_lastMousePressed
+
+    private void jList1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MousePressed
+       
+            // jList 클릭시
+            String str= jList1.getSelectedValue();
+            imagesList=getImages(str);
+            this.str =str;
+            index = 1;
+            try {
+                showImage(str, 1);
+                //ImageIcon icon = new ImageIcon(getClass().getResource("/img/"+str+"/"+imagesList[0]));
+                // Image image = icon.getImage().getScaledInstance(jLabel14.getWidth(), jLabel14.getHeight(), Image.SCALE_SMOOTH);
+                //jLabel14.setIcon(new ImageIcon(image));
+            } catch (IOException ex) {
+                Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }//GEN-LAST:event_jList1MousePressed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // 채팅 텍스트 필드
+        try {
+            String chatCon = jTextField3.getText();
+            LoginFrame.out.writeUTF("채팅:"+ name + ":"+chatCon);
+            jTextField3.setText("");
+           
+            sb.append(chatCon).append(" ");
+            showAd(sb);
         } catch (IOException ex) {
             Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jLabel17MousePressed
+    }//GEN-LAST:event_jTextField3ActionPerformed
+    private void showAd(StringBuilder sb) throws IOException{
+        String str =wordCount(sb.toString());
+            if(str==""||str==null){
+                showAdImage("ix");
+            }else{
+                showAdImage(str);
+            }//모델 광고 보여주기
+    }
+    private void setPhoneCollection(){
+       
+        moSet.add("g7");
+        moSet.add("g6");
+        moSet.add("g5");
+        moSet.add("s9");
+        moSet.add("s8");
+        moSet.add("s7");
+        moSet.add("ix");
+        moSet.add("i8");
+        moSet.add("i7");   
+    }
+    private void jLabel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MousePressed
+        // TODO add your handling code here:
+        logout();
+        
+    }//GEN-LAST:event_jLabel1MousePressed
+
+    private void previousMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_previousMousePressed
+        // previous
+        if(jList1.getSelectedValue()==null){
+            JOptionPane.showMessageDialog(this, "모델명을 선택하세요.");
+        }else{
+            index = index - 1;
+            if(index <= 0)
+            {
+                JOptionPane.showMessageDialog(this, "첫번째 이미지입니다.");
+                index = 1;
+            }
+            try {
+                showImage(index);
+            } catch (IOException ex) {
+                Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+      
+    }//GEN-LAST:event_previousMousePressed
+
+    private void nextMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nextMousePressed
+        // next
+        if(jList1.getSelectedValue()==null){
+            JOptionPane.showMessageDialog(this, "모델명을 선택하세요.");
+        }else{
+            index = index + 1;
+            if(index >= getImages().length)
+            {
+                JOptionPane.showMessageDialog(this, "마지막 이미지입니다.");
+                index  = getImages().length - 1;
+            }
+            try {
+                showImage(index);
+            } catch (IOException ex) {
+                Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }   
+    }//GEN-LAST:event_nextMousePressed
+    
+    private void logout(){
+        this.setVisible(false);
+        login.setVisible(true);
+        try {
+            LoginFrame.out.writeUTF("로그아웃:");
+            t.stop();
+            LoginFrame.in.close();
+            LoginFrame.out.close();
+            LoginFrame.s.close();
+            LoginFrame.s=null;
+        } catch (IOException ex) {
+            System.out.println("erro:"+ex);
+        }
+    }
+    
+    public String[] getImages(){
+    
+        File file = new File(getClass().getResource("/img/"+str+"/").getFile());
+        String []imgList = file.list();
+        return imgList;
+    }
+    
+       public String[] getImages(String str){
+    
+        File file = new File(getClass().getResource("/img/"+str+"/").getFile());
+        String []imgList = file.list();
+
+        return imgList;
+    }
+    
+    public void showAdImage(String str) throws IOException{
+    
+        ImageIcon icon = new ImageIcon(getClass().getResource("/img/ad/"+str+".jpg"));
+        Image image = icon.getImage().getScaledInstance(jLabel13.getWidth(), jLabel13.getHeight(), Image.SCALE_SMOOTH);
+        jLabel13.setIcon(new ImageIcon(image));
+    }
+    
+    public void showImage(int index) throws IOException{
+    
+      
+        String imageName = imagesList[index];
+        System.out.println("imageName:" +imageName);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/img/"+str+"/"+imageName));
+        Image image = icon.getImage().getScaledInstance(jLabel14.getWidth(), jLabel14.getHeight(), Image.SCALE_SMOOTH);
+        jLabel14.setIcon(new ImageIcon(image));
+    }
+    public void showImage(String str, int index) throws IOException{
+    
+        String [] imagesList =getImages(str);
+        String imageName = imagesList[index];
+        ImageIcon icon = new ImageIcon(getClass().getResource("/img/"+str+"/"+imageName));
+        Image image = icon.getImage().getScaledInstance(jLabel14.getWidth(), jLabel14.getHeight(), Image.SCALE_SMOOTH);
+        jLabel14.setIcon(new ImageIcon(image));
+    }
+    
     private void firstList(){
         try {
-            // TODO add your handling code here:
-            out.writeUTF("제조사:apple");
-            String str = in.readUTF();
-            String [] data = str.split(":");
-           
-            
-            for(int i=1; i<data.length;i++){
-            dlm.addElement("*" + data[i]);
-            }
+            LoginFrame.out.writeUTF("제조사:apple");
+           // String str = in.readUTF();
+           // String [] data = str.split(":");
+           // jList1.setListData(data);
         } catch (IOException ex) {
-            Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("erro:"+ex);
         }
     }
-    /**
-     * @param args the command line arguments
-     */
-    private void setColor(){
-        
+    
+    private String wordCount(String data) {
+        System.out.println(data);
+            StringBuilder sbr = new StringBuilder();
+            String[] all = data.split(" ");
+ 
+            HashMap<String,Integer> map = new HashMap<String,Integer>();
+            for(String key : all){
+                Integer value = map.get(key);
+                if(value==null){
+                    map.put(key,new Integer(1));
+                }else{
+                    map.put(key, new Integer(value.intValue() +1));
+                }
+            }
+
+            Set<String> keys = map.keySet();
+            ArrayList<String> list = new ArrayList<String>();
+            Iterator<String> iterator = keys.iterator();
+            while(iterator.hasNext()){
+                    String key = iterator.next();
+                    if(!key.contains("[")){
+                        list.add(key);
+                    }
+
+            }
+            Collections.sort(list, new Comparator<String>(){
+              @Override
+                public int compare(String k1, String k2) {
+                        Integer v1 = map.get(k1);
+                        Integer v2 = map.get(k2);
+                        return v1.compareTo(v2);
+                    }
+                });
+
+                Collections.reverse(list); //내림차순
+                LinkedHashMap<String,Integer> sortedMap = new LinkedHashMap<String,Integer>();
+                //String[] str = new String[10];
+                try{
+                        for(int i=0; i<10;i++){
+                             String key =list.get(i);
+                             if(moSet.contains(key)){
+                                 return key;
+                             }else{
+                                  return "";
+                             }
+                        }
+                        
+                  }catch(IndexOutOfBoundsException e){System.out.println("erro:"+e);}
+               return "";
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel first;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JDialog jDialog1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabel_welcom;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -541,7 +966,41 @@ int mx,my;
     private javax.swing.JPanel jPanel_main_view;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField3;
+    private javax.swing.JLabel last;
+    private javax.swing.JLabel next;
+    private javax.swing.JLabel previous;
     // End of variables declaration//GEN-END:variables
-}
+
+    private void clientService(String[] c_ptc) throws IOException {
+        switch(c_ptc[0]){
+                    case "채팅":
+                                    jTextArea1.append(c_ptc[1]+"\n");
+                                    break;
+                    case "방문자수":
+                                    jLabel11.setText(c_ptc[1]);
+                                    break;
+                    case "이슈":
+                                    jComboBox1.removeAllItems();
+                                    for(int i=1;i<c_ptc.length;i++){
+                                        jComboBox1.addItem(c_ptc[i]);
+                                    } 
+                                    break;
+                                    
+                    case "모델명":  
+                                    String[] c_ptcTo = new String[c_ptc.length-1];
+                                    for(int i=1;i<c_ptc.length;i++){
+                                        c_ptcTo[i-1]=c_ptc[i];
+                                    }
+                                    jList1.setListData(c_ptcTo);
+                                    showImage(c_ptcTo[0],1);
+                                    break;
+                    
+        }
+    }//clientService
+}//class end
